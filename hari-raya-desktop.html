@@ -24,47 +24,44 @@
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: var(--gray); border-radius: 2px; }
+  /* ── CUSTOM CURSOR ── */
+  * { cursor: none !important; }
+
+  #cursor {
+    width: 18px;
+    height: 24px;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-2px, -2px);
+  }
+
+  #cursor svg {
+    width: 100%; height: 100%;
+    filter: drop-shadow(2px 2px 0px black);
+  }
+
+  #cursor.clicking svg .cursor-fill {
+    fill: #E7FF2C;
+  }
+
+
 
   html, body { width: 100%; height: 100%; overflow: hidden; }
 
   /* ── DESKTOP ── */
   #desktop {
     width: 100%; height: 100%;
-    background-color: #38b000;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30Z' fill='none' stroke='rgba(0,0,0,0.1)' stroke-width='1.5'/%3E%3Ccircle cx='30' cy='30' r='5' fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='1'/%3E%3C/svg%3E");
-    background-blend-mode: multiply;
+    background-color: #faf6ee;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
     position: relative;
-  }
-
-  /* ── STARS ── */
-  #stars { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-  .star {
-    position: absolute; width: 3px; height: 3px;
-    background: rgba(255,255,255,0.7); border-radius: 50%;
-    animation: twinkle var(--dur, 3s) ease-in-out infinite;
-    animation-delay: var(--delay, 0s);
-  }
-  @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:1} }
-
-  /* ── LANTERNS ── */
-  .lantern {
-    position: absolute; font-size: clamp(24px, 5vw, 32px);
-    animation: sway 4s ease-in-out infinite; pointer-events: none;
-    filter: drop-shadow(2px 2px 0px black);
-  }
-  @keyframes sway { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
-
-  /* ── DESKTOP TITLE (top-center) ── */
-  #desktop-title {
-    position: absolute;
-    top: 14px; left: 50%; transform: translateX(-50%);
-    text-align: center; pointer-events: none; white-space: nowrap;
   }
   #desktop-title h1 {
     font-family: 'Amiri', serif;
     font-size: clamp(18px, 4.5vw, 30px);
     color: var(--back); font-weight: 900;
-    text-shadow: 3px 3px 0px black; letter-spacing: 2px;
+    text-shadow: 3px 3px 0px black; letter-spacing: 2px; color: white;
   }
   #desktop-title p {
     font-size: 11px; font-weight: 700;
@@ -115,7 +112,7 @@
   .icon-label {
     font-size: clamp(11px, 2.8vw, 13px); font-weight: 800;
     color: var(--back);
-    text-shadow: 1px 1px 0px black, 2px 2px 0px black;
+    text-shadow: 1px 1px 0px black, 2px 2px 0px black; color: white;
     letter-spacing: 0.5px; text-align: center; line-height: 1.2;
   }
 
@@ -338,20 +335,74 @@
 
   .window-body::-webkit-scrollbar { width: 4px; }
   .window-body::-webkit-scrollbar-thumb { background: var(--gray); border-radius: 2px; }
+
+  /* ── START MENU ── */
+  #start-menu {
+    display: none;
+    position: absolute;
+    bottom: 44px; left: 8px;
+    width: 220px;
+    background: var(--back);
+    border: 2px solid black;
+    border-radius: 4px 4px 0px 4px;
+    box-shadow: 4px 4px 0px black;
+    z-index: 100;
+    overflow: hidden;
+    animation: slideUp 0.18s ease forwards;
+  }
+  #start-menu.open { display: block; }
+
+  .start-menu-header {
+    background: var(--color);
+    border-bottom: 2px solid black;
+    padding: 10px 14px;
+    font-weight: 900;
+    font-size: 13px;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 0px black;
+  }
+
+  .start-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--gray);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+    transition: background 0.15s, transform 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .start-menu-item:last-child { border-bottom: none; }
+
+  .start-menu-item:hover {
+    background: #E7FF2C;
+    transform: translate(2px, 0);
+  }
+
+  .start-menu-item:active { filter: brightness(85%); }
+
+  .start-menu-icon {
+    width: 32px; height: 32px;
+    border: 2px solid black;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px black;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .start-menu-item-label { line-height: 1.2; }
+
 </style>
 </head>
 <body>
 
 <div id="desktop">
-  <div id="stars"></div>
-
-  <span class="lantern" style="top:8px; left:48%;">🏮</span>
-  <span class="lantern" style="top:8px; right:8%; animation-delay:-2s;">🏮</span>
-
-  <div id="desktop-title">
-    <h1>✦ عيد مبارك ✦</h1>
-    <p>EID MUBARAK DESKTOP v1.4</p>
-  </div>
 
   <!-- Icons — top left -->
   <div id="icons-area">
@@ -380,8 +431,41 @@
     </div>
   </div>
 
+
+  <!-- START MENU -->
+  <div id="start-menu">
+    <div class="start-menu-header">⊞ &nbsp;PROGRAMS</div>
+    <div class="start-menu-item" onclick="openWindow('mail'); toggleStart()">
+      <div class="start-menu-icon" style="background:#fff7e0">
+        <svg viewBox="0 0 48 48" fill="none" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="10" width="40" height="28" rx="2" fill="#ffc300" stroke="black" stroke-width="2.5"/>
+          <polyline points="4,10 24,28 44,10" fill="none" stroke="black" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="start-menu-item-label">Letter.exe</span>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('gallery'); toggleStart()">
+      <div class="start-menu-icon" style="background:#e0f0ff">
+        <svg viewBox="0 0 48 48" fill="none" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="9" width="38" height="30" rx="2" fill="#3880ff" stroke="black" stroke-width="2.5"/>
+          <circle cx="18" cy="20" r="3.5" fill="#ffc300" stroke="black" stroke-width="1.5"/>
+          <polyline points="10,34 19,25 25,30 31,22 38,34" fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="start-menu-item-label">Gallery.exe</span>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('secret'); toggleStart()">
+      <div class="start-menu-icon" style="background:#ffe0e0">
+        <svg viewBox="0 0 48 48" fill="none" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 40 C24 40 6 28 6 16 C6 10 10.5 6 16 6 C20 6 23 8.5 24 10 C25 8.5 28 6 32 6 C37.5 6 42 10 42 16 C42 28 24 40 24 40Z" fill="#e01e37" stroke="black" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="start-menu-item-label">nothing to see<br>here, huh xxx</span>
+    </div>
+  </div>
+
   <div id="taskbar">
-    <div id="start-badge">⊞ START</div>
+    <div id="start-badge" onclick="toggleStart()">⊞ START</div>
     <div id="clock">--:--</div>
   </div>
 </div>
@@ -446,9 +530,45 @@
     </div>
   </div>
 
+
+  <!-- SECRET WINDOW -->
+  <div class="window" id="window-secret" role="dialog">
+    <div class="title-bar" style="background:#e01e37">
+      <span class="title-text">💀 nothing to see here, huh xxx</span>
+      <button class="btn-close" onclick="closeWindow()">✕ Close</button>
+    </div>
+    <div class="window-body" style="background:#fff0f0; padding:32px 24px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; flex:1; min-height:240px;">
+      <svg viewBox="0 0 120 100" fill="none" width="120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 90 C60 90 10 58 10 30 C10 16 20 8 32 8 C44 8 54 16 60 24 C66 16 76 8 88 8 C100 8 110 16 110 30 C110 58 60 90 60 90Z" fill="#e01e37" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M35 30 C35 24 40 20 46 22" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+      <div style="font-family:Cutive,monospace; font-size:15px; color:#262627; text-align:center; line-height:1.7; border:2px solid black; border-radius:4px; padding:14px 18px; box-shadow:3px 3px 0px black; background:white;">
+        okay fine. you found it. 🫣<br>
+        <strong style="color:#e01e37; font-size:18px;">i like u a lil bit.</strong><br>
+        just a lil. don't make it weird.<br><br>
+        <span style="font-size:12px; color:#888;">*closes tab nervously*</span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
+
+  function toggleStart() {
+    const menu = document.getElementById('start-menu');
+    menu.classList.toggle('open');
+  }
+
+  // close start menu when clicking outside
+  document.addEventListener('click', e => {
+    const menu = document.getElementById('start-menu');
+    const badge = document.getElementById('start-badge');
+    if (!menu.contains(e.target) && e.target !== badge) {
+      menu.classList.remove('open');
+    }
+  });
+
   function updateClock() {
     const now = new Date();
     document.getElementById('clock').textContent =
@@ -456,14 +576,6 @@
   }
   updateClock();
   setInterval(updateClock, 10000);
-
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 22; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*85}%;--dur:${2+Math.random()*4}s;--delay:-${Math.random()*4}s;`;
-    starsEl.appendChild(s);
-  }
 
   function openWindow(name) {
     closeWindow();
@@ -486,6 +598,43 @@
   }
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeWindow(); });
+</script>
+
+<div id="cursor">
+  <svg viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path class="cursor-fill" d="M2 2L2 18L6 14L9 20L11.5 19L8.5 13L14 13L2 2Z" fill="white" stroke="black" stroke-width="1.8" stroke-linejoin="round"/>
+  </svg>
+
+  <!-- SECRET WINDOW -->
+  <div class="window" id="window-secret" role="dialog">
+    <div class="title-bar" style="background:#e01e37">
+      <span class="title-text">💀 nothing to see here, huh xxx</span>
+      <button class="btn-close" onclick="closeWindow()">✕ Close</button>
+    </div>
+    <div class="window-body" style="background:#fff0f0; padding:32px 24px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; flex:1; min-height:240px;">
+      <svg viewBox="0 0 120 100" fill="none" width="120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 90 C60 90 10 58 10 30 C10 16 20 8 32 8 C44 8 54 16 60 24 C66 16 76 8 88 8 C100 8 110 16 110 30 C110 58 60 90 60 90Z" fill="#e01e37" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M35 30 C35 24 40 20 46 22" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+      <div style="font-family:Cutive,monospace; font-size:15px; color:#262627; text-align:center; line-height:1.7; border:2px solid black; border-radius:4px; padding:14px 18px; box-shadow:3px 3px 0px black; background:white;">
+        okay fine. you found it. 🫣<br>
+        <strong style="color:#e01e37; font-size:18px;">i like u a lil bit.</strong><br>
+        just a lil. don't make it weird.<br><br>
+        <span style="font-size:12px; color:#888;">*closes tab nervously*</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const cur = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mousedown', () => cur.classList.add('clicking'));
+  document.addEventListener('mouseup', () => cur.classList.remove('clicking'));
 </script>
 </body>
 </html>
